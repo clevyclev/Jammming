@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
 
-import SearchResults from '../src/components/SearchResults/SearchResults';
-import Playlist from '../src/components/Playlist/Playlist';
-import SearchBar from '../src/components/SearchBar/SearchBar';
+import SearchResults from '../SearchResults/SearchResults';
+import Playlist from '../Playlist/Playlist';
+import SearchBar from '../SearchBar/SearchBar';
 import Spotify from '../src/util/Spotify';
 
 
@@ -27,3 +27,5 @@ class App extends React.Component {
     );
   }
 }
+
+export default App;
