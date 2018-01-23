@@ -9,7 +9,7 @@ class Track extends React.Component{
       return <a className="Track-action" onClick={this.removeTrack}>-</a>;;
     }
     else{
-      return <a className="Track-action" onClick={this.removeTrack}>+</a>;;
+      return <a className="Track-action" onClick={this.addTrack}>+</a>;;
     }
   }
 
