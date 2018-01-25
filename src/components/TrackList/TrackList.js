@@ -11,11 +11,7 @@ class TrackList extends React.Component{
       <div className="TrackList">
         this.props.tracks.map(track => {
         return (
-          <Track track={track}
-          key={track.id}
-          name={this.props.track.name}
-          artist={this.props.track.artist}
-          album={this.props.track.album} />
+          <Track track={track} key={track.id} />
         )
         });
       </div>
