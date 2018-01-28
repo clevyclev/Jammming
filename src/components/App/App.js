@@ -75,7 +75,7 @@ class App extends React.Component {
   }
 
   search(term){
-    console.log(term);
+    Spotify.search(term);
   }
 
   render() {
