@@ -1,6 +1,6 @@
 import React from 'react';
 
-const redirectUri = 'http://localhost:3000/';
+const redirectUri = 'http://clevistation-jammming.surge.sh';
 const clientId = '90aa666284304f24a61fec4c17ca2cc6';
 
 let token = '';
@@ -39,7 +39,31 @@ const Spotify = {
         artist: track.artist[0].name,
         album: track.album.name,
         uri: track.uri
-      }));  
-  };
+      }));
+    }
 
+    savePlaylist(playlistName, trackURIs){
+      if(!playlistName || !trackURIs){
+        return;
+      }
+      let token = Spotify.getAccessToken();
+      let response = await fetch(`https://api.spotify.com/v1/me`, {
+      headers: {Authorization: `Bearer ${token}`}
+      });
+      let jsonResponse = await response.json();
+      let user_ID = jsonResponse.id;
+      response = await fetch(`https://api.spotify.com/v1/users/${user_ID}/playlists`, {
+        headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
+        method: 'POST',
+        body: JSON.stringify({name: name})
+      });
+      jsonResponse = await response.json();
+      let playlist_ID = jsonResponse.id;
+      return await fetch(`https://api.spotify.com/v1/users/${user_ID}/playlists/${playlist_ID}/tracks`, {
+        headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
+        method: 'POST',
+        body: JSON.stringify({uris: TrackURIs})
+      });
+    }
+};
 export default Spotify;
