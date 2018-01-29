@@ -14,6 +14,7 @@ const Spotify = {
       const expiresIn = Number(expiresInMatch[1]);
       window.setTimeout(() => token = '', expiresIn * 1000);
       window.history.pushState('Access Token', null, '/');
+      console.log(token);
       return token;
       }
     else{
@@ -22,10 +23,12 @@ const Spotify = {
     },
 
   async search(term){
-      const token = Spotify.getAccessToken();
-      let response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,
-        {headers: {Authorization: `Bearer ${token}`}}
+      const accessToken = Spotify.getAccessToken();
+      console.log(accessToken);
+      let response = await fetch(`https://api.spotify.com/v1/search?q=${term}&type=track,album,artist`,
+        {headers: {'Authorization': `Bearer ${accessToken}`}}
       );
+      console.log(response);
       let jsonResponse = await response.json();
       if (!jsonResponse.tracks){
         return [];
@@ -40,27 +43,28 @@ const Spotify = {
     },
 
     async savePlaylist(playlistName, trackURIs){
-      if(!playlistName || !trackURIs){
+      if(!playlistName || !trackURIs.length){
         return;
       }
-      let token = Spotify.getAccessToken();
-      let response = await fetch(`https://api.spotify.com/v1/me`, {
-        headers: {Authorization: `Bearer ${token}`}
+      const accessToken = Spotify.getAccessToken();
+      let response = await fetch('https://api.spotify.com/v1/me', {
+        headers: {'Authorization': `Bearer ${accessToken}`}
       });
       let jsonResponse = await response.json();
       let user_ID = jsonResponse.id;
       response = await fetch(`https://api.spotify.com/v1/users/${user_ID}/playlists`, {
-        headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
+        headers: {'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json'},
         method: 'POST',
         body: JSON.stringify({name: playlistName})
       });
       jsonResponse = await response.json();
       let playlist_ID = jsonResponse.id;
       return await fetch(`https://api.spotify.com/v1/users/${user_ID}/playlists/${playlist_ID}/tracks`, {
-        headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
+        headers: {'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json'},
         method: 'POST',
         body: JSON.stringify({uris: trackURIs})
       });
     }
 };
+
 export default Spotify;
