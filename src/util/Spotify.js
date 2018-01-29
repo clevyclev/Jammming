@@ -1,6 +1,5 @@
 const redirectUri = 'http://clevistation-jammming.surge.sh';
 const clientId = '90aa666284304f24a61fec4c17ca2cc6';
-
 let token = '';
 
 const Spotify = {
@@ -9,10 +8,10 @@ const Spotify = {
       return token;
     }
     const tokenMatch = window.location.href.match(/access_token=([^&]*)/);
-    const expiryMatch = window.location.href.match(/expires_in=([^&]*)/);
-    if(tokenMatch && expiryMatch){
+    const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
+    if(tokenMatch && expiresInMatch){
       token = tokenMatch[1];
-      const expiresIn = Number(expiryMatch[1]);
+      const expiresIn = Number(expiresInMatch[1]);
       window.setTimeout(() => token = '', expiresIn * 1000);
       window.history.pushState('Access Token', null, '/');
       return token;

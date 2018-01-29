@@ -12,19 +12,21 @@ class App extends React.Component {
     super(props);
     this.state = {
       searchResults: [],
-    playlistName: 'My Playlist',
-    playlistTracks: []
-    }
-      this.addTrack = this.addTrack.bind(this);
-      this.removeTrack = this.removeTrack.bind(this);
-      this.updatePlaylistName = this.updatePlaylistName.bind(this)
-      this.savePlaylist = this.savePlaylist.bind(this);
-      this.search = this.search.bind(this);
+      playlistName: 'My Playlist',
+      playlistTracks: []
+    };
+    this.addTrack = this.addTrack.bind(this);
+    this.removeTrack = this.removeTrack.bind(this);
+    this.updatePlaylistName = this.updatePlaylistName.bind(this);
+    this.savePlaylist = this.savePlaylist.bind(this);
+    this.search = this.search.bind(this);
   }
 
   addTrack(track){
-    if(!this.state.playlistTracks.includes(track.id)){
-      this.state.playlistTracks.push(track);
+    let tracks = this.state.playlist;
+    if(!tracks.find(obj => obj.id === track.id)){
+      tracks.push(track);
+      this.setState({playlist: tracks});
     }
   }
 
