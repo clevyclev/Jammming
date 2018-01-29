@@ -1,4 +1,4 @@
-const redirectUri = 'http://clevistation-jammming.surge.sh';
+const redirectUri = 'https://clevistation-jammming.surge.sh';
 const clientId = '90aa666284304f24a61fec4c17ca2cc6';
 let token = '';
 
