@@ -1,12 +1,10 @@
-import React from 'react';
-
 const redirectUri = 'http://clevistation-jammming.surge.sh';
 const clientId = '90aa666284304f24a61fec4c17ca2cc6';
 
 let token = '';
 
 const Spotify = {
-  getAccessToken(){
+  async getAccessToken(){
     if (token){
       return token;
     }
@@ -22,9 +20,9 @@ const Spotify = {
     else{
       window.location = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
       }
-    }
+    },
 
-    search(term){
+  async search(term){
       const token = Spotify.getAccessToken();
       let response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,
         {headers: {Authorization: `Bearer ${token}`}}
@@ -40,9 +38,9 @@ const Spotify = {
         album: track.album.name,
         uri: track.uri
       }));
-    }
+    },
 
-    savePlaylist(playlistName, trackURIs){
+    async savePlaylist(playlistName, trackURIs){
       if(!playlistName || !trackURIs){
         return;
       }
@@ -55,14 +53,14 @@ const Spotify = {
       response = await fetch(`https://api.spotify.com/v1/users/${user_ID}/playlists`, {
         headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
         method: 'POST',
-        body: JSON.stringify({name: name})
+        body: JSON.stringify({name: playlistName})
       });
       jsonResponse = await response.json();
       let playlist_ID = jsonResponse.id;
       return await fetch(`https://api.spotify.com/v1/users/${user_ID}/playlists/${playlist_ID}/tracks`, {
         headers: {Authorization: `Bearer ${token}`, 'Content-Type': 'application/json'},
         method: 'POST',
-        body: JSON.stringify({uris: TrackURIs})
+        body: JSON.stringify({uris: trackURIs})
       });
     }
 };
