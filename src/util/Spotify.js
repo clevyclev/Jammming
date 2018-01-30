@@ -3,50 +3,64 @@ const clientId = '90aa666284304f24a61fec4c17ca2cc6';
 let token = '';
 
 const Spotify = {
-  async getAccessToken(){
-    if (token){
-      return token;
-    }
-    const tokenMatch = window.location.href.match(/access_token=([^&]*)/);
-    const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
-    if(tokenMatch && expiresInMatch){
-      token = tokenMatch[1];
-      const expiresIn = Number(expiresInMatch[1]);
-      window.setTimeout(() => token = '', expiresIn * 1000);
-      window.history.pushState('Access Token', null, '/');
-      console.log(token);
-      return token;
-      }
-    else{
-      window.location = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
+  getToken(){
+      if(token) return token;
+      const tokenMatch = window.location.href.match(/access_token=([^&]*)/);
+      const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
+      if(tokenMatch && expiresInMatch){
+        token = tokenMatch[1];
+        const expiresIn = Number(expiresInMatch[1]);
+        window.setTimeout(() => token = '', expiresIn * 1000);
+        window.history.pushState('Access Token', null, '/');
+        return token;
+      }else{
+        window.location = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
       }
     },
 
   async search(term){
-      const accessToken = Spotify.getAccessToken();
-      console.log(accessToken);
-      let response = await fetch(`https://api.spotify.com/v1/search?q=${term}&type=track,album,artist`,
-        {headers: {'Authorization': `Bearer ${accessToken}`}}
-      );
-      console.log(response);
-      let jsonResponse = await response.json();
-      if (!jsonResponse.tracks){
-        return [];
+    const accessToken = Spotify.getToken();
+    let fetchURL = 'https://api.spotify.com/v1/search';
+    fetchURL += '?q=' + term;
+    fetchURL += '&type=track,album,artist';
+    return fetch(fetchURL, {
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
       }
-      return jsonResponse.tracks.items.map(track => ({
-        id: track.id,
-        name: track.name,
-        artist: track.artists[0].name,
-        album: track.album.name,
-        uri: track.uri
-      }));
-    },
+    })
+    .then(
+      response => {
+        if(response.ok) {
+          return response.json();
+        }
+        throw new Error('Request failed!');
+      }, networkError => console.log(networkError.message)
+    )
+    .then(
+      jsonResponse => {
+        if(jsonResponse.tracks.items) {
+          let returnedTracks = jsonResponse.tracks.items.map( track => ({
+            id: track.id,
+            trackName: track.name,
+            artistName: track.artists[0].name,
+            albumName: track.album.name,
+            uri: track.uri,
+            searchTerm: term,
+            previewURL: track.preview_url
+          }));
+          if (typeof returnedTracks !== "undefined" && returnedTracks !== null) {
+            return returnedTracks;
+          }
+        }
+      }
+    );
+  },
 
     async savePlaylist(playlistName, trackURIs){
       if(!playlistName || !trackURIs.length){
         return;
       }
-      const accessToken = Spotify.getAccessToken();
+      const accessToken = Spotify.getToken();
       let response = await fetch('https://api.spotify.com/v1/me', {
         headers: {'Authorization': `Bearer ${accessToken}`}
       });
