@@ -22,7 +22,7 @@ const Spotify = {
     const accessToken = Spotify.getToken();
     let fetchURL = 'https://api.spotify.com/v1/search';
     fetchURL += '?q=' + term;
-    fetchURL += '&type=track,album,artist';
+    fetchURL += '&type=track';
     return fetch(fetchURL, {
       headers: {
         'Authorization': 'Bearer ' + accessToken
