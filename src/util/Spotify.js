@@ -39,13 +39,14 @@ const Spotify = {
     .then(
       jsonResponse => {
         if(jsonResponse.tracks.items) {
+          console.log(jsonResponse.tracks);
+          console.log(jsonResponse.tracks.items);
           let returnedTracks = jsonResponse.tracks.items.map( track => ({
             id: track.id,
             trackName: track.name,
             artistName: track.artists[0].name,
             albumName: track.album.name,
             uri: track.uri,
-            searchTerm: term,
             previewURL: track.preview_url
           }));
           if (typeof returnedTracks !== "undefined" && returnedTracks !== null) {
