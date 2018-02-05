@@ -1,0 +1,3 @@
+Live web application can be accessed at https://clevistation-jammming.surge.sh
+When working with the souce code, you will need to change the Redirect URL to your own URL for publishing the site.
+You will also need to change the ClientID to your own (obtain by creating a Developer Account with Spotify).
