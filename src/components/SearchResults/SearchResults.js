@@ -5,7 +5,7 @@ import TrackList from '../TrackList/TrackList';
 
 class SearchResults extends React.Component{
 
-
+// Rendering the TrackList component within the SearchResults pane
   render(){
     return (
       <div className="SearchResults">

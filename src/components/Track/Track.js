@@ -8,14 +8,17 @@ class Track extends React.Component{
     this.removeTrack = this.removeTrack.bind(this);
   }
 
+//Each track should have the ability to be added to the new playlist
   addTrack(){
     this.props.onAdd(this.props.track);
   }
 
+//Likewise, each track should have functionality to be removed from the playlist
   removeTrack(){
     this.props.onRemove(this.props.track);
   }
 
+//Toggling between adding if not yet in the new playlist and removing if already in the playlist
   renderAction(){
     if(this.props.onRemove){
       return <a className="Track-action" onClick={this.removeTrack}>-</a>;

@@ -8,10 +8,12 @@ class Playlist extends React.Component{
     this.handleNameChange = this.handleNameChange.bind(this);
   }
 
+//Allowign the user to change the name of the new playlist
   handleNameChange(event){
     this.props.onNameChange(event.target.value)
   }
 
+//Rendering the TrackList component within the new playlist pane
   render(){
     return (
       <div className="Playlist">

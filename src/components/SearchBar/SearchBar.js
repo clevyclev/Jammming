@@ -14,14 +14,17 @@ class SearchBar extends React.Component {
     this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
   }
 
+//Implementing the search funtionality in the search button
   search(){
     this.props.onSearch(this.state.term);
   }
 
+//Handling the search value input
   handleTermChange(event){
     this.setState({term: event.target.value});
   }
 
+//Adding functionality for pressing the return key
   handleOnKeyUp(event){
   if(event.keyCode === 13){
     this.props.onSearch(this.state.term);

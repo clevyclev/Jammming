@@ -22,6 +22,7 @@ class App extends React.Component {
     this.search = this.search.bind(this);
   }
 
+//Adding the track to the new Playlist.  From the Track component.
   addTrack(track){
     let tracks = this.state.playlistTracks;
     if(!tracks.find(obj => obj.id === track.id)){
@@ -30,16 +31,19 @@ class App extends React.Component {
     }
   }
 
+//Removing the track from the new Playlist.  From the Track component.
   removeTrack(track){
     let tracks = this.state.playlistTracks;
     tracks = tracks.filter(currentTrack => currentTrack.id !== track.id);
     this.setState({playlistTracks: tracks});
   }
 
+//Updating the new playlist with a user-specified name
   updatePlaylistName(name){
     this.setState({playlistName: name});
   }
 
+//Saving the new playlist
   savePlaylist(){
     let trackURIs = this.state.playlistTracks.map(track => track.uri);
     Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
@@ -50,6 +54,7 @@ class App extends React.Component {
     });
   }
 
+//Sending the search value to the Spotify API and setting the search results for viewing
   search(term){
     Spotify.search(term).then(searchResults => {
       this.setState({searchResults: searchResults});

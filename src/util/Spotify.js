@@ -2,7 +2,9 @@ const redirectUri = 'https://clevistation-jammming.surge.sh';
 const clientId = '90aa666284304f24a61fec4c17ca2cc6';
 let token = '';
 
+//Implementing the Spotify API
 const Spotify = {
+  //Getting the user's token from Spotify
   getToken(){
       if(token) return token;
       const tokenMatch = window.location.href.match(/access_token=([^&]*)/);
@@ -18,6 +20,7 @@ const Spotify = {
       }
     },
 
+//Sending a search for a song to the API
   async search(term){
     const accessToken = Spotify.getToken();
     let fetchURL = 'https://api.spotify.com/v1/search';
@@ -57,6 +60,7 @@ const Spotify = {
     );
   },
 
+//Saving the new playlist to the user's Spotify
     async savePlaylist(playlistName, trackURIs){
       if(!playlistName || !trackURIs.length){
         return;
